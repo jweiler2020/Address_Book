@@ -19,7 +19,7 @@ public class Rolodex {
 		boolean done = false;
 		while(!done)
 		{
-			System.out.print("(A)dd, (D)elete, (P)rint, (Q)uit: ");
+			System.out.print("(A)dd, (D)elete, (P)rint, (S)ort, (Q)uit: ");
 			input = kb.nextLine();
 			switch(input.toLowerCase())
 			{
@@ -41,6 +41,11 @@ public class Rolodex {
 				case("print"):
 					System.out.println("The current list:");
 					System.out.println(rolo);
+					break;
+				case("s"):
+				case("sort"):
+					rolo.sort();
+					System.out.println("Done sorting list");
 					break;
 				case("q"):
 				case("quit"):
@@ -102,9 +107,42 @@ public class Rolodex {
 			return "[]";
 	}
 	
+	// Sorting methods
 	public void sort(){
 		//Sorts the names array alphabetically
-		// TODO
+		quicksort(names, 0, names.length-1);
+	}
+	
+	private void quicksort(String[] a, int lo, int hi)
+	{
+		if(lo < hi)
+		{
+			int p = partition(a, lo, hi);
+			quicksort(a, lo, p-1);
+			quicksort(a, p+1, hi);
+		}
+	}
+	
+	private int partition(String[] a, int lo, int hi)
+	{
+		String pivot = a[hi];
+		int i = lo;
+		for(int j = lo; j < hi; j++)
+		{
+			if(a[j].compareTo(pivot) < 0)
+			{
+				swap(a, i, j);
+				i++;
+			}
+		}
+		swap(a, i, hi);
+		return i;
+	}
+	
+	private void swap(String[] a, int i, int j)
+	{
+		String temp = a[i];
+		a[i] = a[j];
+		a[j] = temp;
 	}
 }
-
