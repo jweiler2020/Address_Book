@@ -125,11 +125,11 @@ public class Rolodex {
 	
 	private int partition(String[] a, int lo, int hi)
 	{
-		String pivot = a[hi];
+		String pivot = a[hi].toLowerCase();
 		int i = lo;
 		for(int j = lo; j < hi; j++)
 		{
-			if(a[j].compareTo(pivot) < 0)
+			if(a[j].toLowerCase().compareTo(pivot) < 0)
 			{
 				swap(a, i, j);
 				i++;
