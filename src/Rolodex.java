@@ -2,10 +2,10 @@ import java.util.Scanner;
 
 public class Rolodex {
 	
-	private String[] names; //This will eventually be replaced by Card[] cards
+	private Card[] cards; //This will eventually be replaced by Card[] cards
 	
 	public Rolodex(){
-		names = new String[0];
+		cards = new Card[0];
 	}
 		
 	public static void main (String args[]) {
@@ -25,13 +25,11 @@ public class Rolodex {
 			{
 				case("a"):
 				case("add"):
-					System.out.print("Enter the name you would like to add: ");
-					String name = kb.nextLine();
-					rolo.add(name);
+					rolo.add(userInpCard(kb));
 					break;
 				case("d"):
 				case("delete"):
-					System.out.print("Enter the index of the name you would like to delete: ");
+					System.out.print("Enter the index of the person you would like to delete: ");
 					int index = kb.nextInt();
 					kb.nextLine();
 					if(!rolo.delete(index))
@@ -58,48 +56,66 @@ public class Rolodex {
 		}
 	}
 	
-	public void add(String name){
-		//Adds name to the names array (resizing names by 1)
-		String[] temp = new String[names.length + 1];
-		for(int i = 0; i < names.length; i++)
+	public static Card userInpCard(Scanner kb)
+	{
+		String[] info = new String[6];
+		
+		System.out.println("Enter the information of the person in the following order:");
+		System.out.println("Last Name, First Name, Phone Number, Address 1, Address 2, email");
+		
+		for(int i = 0; i < 6; i++)
 		{
-			temp[i] = names[i];
+			System.out.print("> ");
+			info[i] = kb.nextLine();
 		}
-		temp[temp.length - 1] = name;
-		names = temp;
+		
+		return new Card(info);
+	}
+	
+	public void add(Card card){
+		//Adds name to the cards array (resizing cards by 1)
+		Card[] temp = new Card[cards.length + 1];
+		for(int i = 0; i < cards.length; i++)
+		{
+			temp[i] = cards[i];
+		}
+		temp[temp.length - 1] = card;
+		cards = temp;
 	}
 	
 	public boolean delete(int index){
-		//Deletes the element at the specified index (resizing names by -1)
+		//Deletes the element at the specified index (resizing cards by -1)
 		//Returns true if successful, false otherwise (i.e. if index is out of bounds)
-		if(index > names.length - 1)
+		if(index > cards.length - 1)
 			return false;
-		String[] temp = new String[names.length - 1];
-		names[index] = null;
+		Card[] temp = new Card[cards.length - 1];
+		cards[index] = null;
 		int i = 0;
-		for(String n : names)
+		for(Card c : cards)
 		{
-			if(n != null)
+			if(c != null)
 			{
-				temp[i] = n;
+				temp[i] = c;
 				i++;
 			}
 		}
-		names = temp;
+		cards = temp;
 		return true;
 	}
 	
 	public String toString(){
-		if(names.length != 0)
+		if(cards.length != 0)
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.append("[");
-			sb.append(names[0]);
-			for (int i = 1; i < names.length; i++)
+			for (int i = 0; i < cards.length; i++)
 			{
+				sb.append("[");
+				sb.append(cards[i].toString().trim());
+				sb.append("]");
 				sb.append(", ");
-				sb.append(names[i]);
 			}
+			sb.delete(sb.length()-2, sb.length());
 			sb.append("]");
 			return sb.toString();
 		}
@@ -109,40 +125,40 @@ public class Rolodex {
 	
 	// Sorting methods
 	public void sort(){
-		//Sorts the names array alphabetically
-		quicksort(names, 0, names.length-1);
+		//Sorts the cards array alphabetically
+		quicksort(cards, 0, cards.length-1);
 	}
 	
-	private void quicksort(String[] a, int lo, int hi)
+	private void quicksort(Card[] c, int lo, int hi)
 	{
 		if(lo < hi)
 		{
-			int p = partition(a, lo, hi);
-			quicksort(a, lo, p-1);
-			quicksort(a, p+1, hi);
+			int p = partition(c, lo, hi);
+			quicksort(c, lo, p-1);
+			quicksort(c, p+1, hi);
 		}
 	}
 	
-	private int partition(String[] a, int lo, int hi)
+	private int partition(Card[] c, int lo, int hi)
 	{
-		String pivot = a[hi].toLowerCase();
+		String pivot = c[hi].toString().toLowerCase();
 		int i = lo;
 		for(int j = lo; j < hi; j++)
 		{
-			if(a[j].toLowerCase().compareTo(pivot) < 0)
+			if(c[j].toString().toLowerCase().compareTo(pivot) < 0)
 			{
-				swap(a, i, j);
+				swap(c, i, j);
 				i++;
 			}
 		}
-		swap(a, i, hi);
+		swap(c, i, hi);
 		return i;
 	}
 	
-	private void swap(String[] a, int i, int j)
+	private void swap(Card[] c, int i, int j)
 	{
-		String temp = a[i];
-		a[i] = a[j];
-		a[j] = temp;
+		Card temp = c[i];
+		c[i] = c[j];
+		c[j] = temp;
 	}
 }

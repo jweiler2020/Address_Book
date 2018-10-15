@@ -14,6 +14,10 @@ public class Card {
 	
 	public static void main(String[] args)
 	{
+		Card c = new Card(new String[]{"Weiler", "Justin", "911", "123 Street St", "City, State, 91711", "justin@email.com"});
+		
+		System.out.println("[" + c + "]");
+		System.out.println(c.getName());
 	}
 	
 	public String toString(){
@@ -25,11 +29,14 @@ public class Card {
 			sb.append(st);
 			sb.append(", ");
 		}
-		sb.delete(sb.length()-2, sb.length()-1);
+		sb.delete(sb.length()-2, sb.length());
 		
 		return sb.toString();
 	}
 	
-	//optionally, you may find accessor/modifier methods useful 
+	public String getName()
+	{
+		return info[1] + " " + info[0];
+	}
 }
 
