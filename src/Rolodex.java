@@ -4,12 +4,13 @@ public class Rolodex {
 	
 	private Card[] cards; //This will eventually be replaced by Card[] cards
 	
-	public Rolodex(){
+	public Rolodex()
+	{
 		cards = new Card[0];
 	}
-		
+	
 	public static void main (String args[]) {
-				
+		
 		//Create a new Rolodex object
 		Rolodex rolo = new Rolodex();
 		
@@ -72,7 +73,8 @@ public class Rolodex {
 		return new Card(info);
 	}
 	
-	public void add(Card card){
+	public void add(Card card)
+	{
 		//Adds name to the cards array (resizing cards by 1)
 		Card[] temp = new Card[cards.length + 1];
 		for(int i = 0; i < cards.length; i++)
@@ -83,7 +85,8 @@ public class Rolodex {
 		cards = temp;
 	}
 	
-	public boolean delete(int index){
+	public boolean delete(int index)
+	{
 		//Deletes the element at the specified index (resizing cards by -1)
 		//Returns true if successful, false otherwise (i.e. if index is out of bounds)
 		if(index > cards.length - 1)
@@ -103,15 +106,17 @@ public class Rolodex {
 		return true;
 	}
 	
-	public String toString(){
+	public String toString()
+	{
 		if(cards.length != 0)
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.append("[");
-			for (int i = 0; i < cards.length; i++)
+			//for (int i = 0; i < cards.length; i++)
+			for(Card c : cards)
 			{
 				sb.append("[");
-				sb.append(cards[i].toString().trim());
+				sb.append(c);
 				sb.append("]");
 				sb.append(", ");
 			}
@@ -124,7 +129,8 @@ public class Rolodex {
 	}
 	
 	// Sorting methods
-	public void sort(){
+	public void sort()
+	{
 		//Sorts the cards array alphabetically
 		quicksort(cards, 0, cards.length-1);
 	}
