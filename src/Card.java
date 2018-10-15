@@ -27,7 +27,7 @@ public class Card {
 		for(String st : info)
 		{
 			sb.append(st);
-			sb.append(", ");
+			sb.append("; ");
 		}
 		sb.delete(sb.length()-2, sb.length());
 		
