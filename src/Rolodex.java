@@ -1,12 +1,18 @@
 import java.util.Scanner;
+import java.io.*;
 
 public class Rolodex {
 	
 	private Card[] cards; //This will eventually be replaced by Card[] cards
+	private int size;
+	private int capacity;
+	private String fileName = "backup.data";
 	
 	public Rolodex()
 	{
-		cards = new Card[0];
+		cards = new Card[1];
+		size = 0;
+		capacity = 1;
 	}
 	
 	public static void main (String args[]) {
@@ -76,47 +82,61 @@ public class Rolodex {
 	public void add(Card card)
 	{
 		//Adds name to the cards array (resizing cards by 1)
-		Card[] temp = new Card[cards.length + 1];
-		for(int i = 0; i < cards.length; i++)
+		size++;
+		if(size > capacity)
 		{
-			temp[i] = cards[i];
+			Card[] temp = new Card[capacity*2];
+			capacity *= 2;
+			for(int i = 0; i < size-1; i++)
+			{
+				temp[i] = cards[i];
+			}
+			temp[size-1] = card;
+			cards = temp;
 		}
-		temp[temp.length - 1] = card;
-		cards = temp;
+		else
+		{
+			System.out.println(size);
+			cards[size-1] = card;
+		}
 	}
 	
 	public boolean delete(int index)
 	{
 		//Deletes the element at the specified index (resizing cards by -1)
 		//Returns true if successful, false otherwise (i.e. if index is out of bounds)
-		if(index > cards.length - 1)
-			return false;
-		Card[] temp = new Card[cards.length - 1];
-		cards[index] = null;
-		int i = 0;
-		for(Card c : cards)
+		if(index < size)
 		{
-			if(c != null)
+			size--;
+			for (int i = index; i < size + 1; i++)
 			{
-				temp[i] = c;
-				i++;
+				cards[i] = cards[i + 1];
 			}
+			if (size <= capacity / 2)
+			{
+				Card[] temp = new Card[capacity / 2];
+				for (int i = 0; i < size; i++)
+				{
+					temp[i] = cards[i];
+				}
+				cards = temp;
+			}
+			return true;
 		}
-		cards = temp;
-		return true;
+		return false;
 	}
 	
 	public String toString()
 	{
-		if(cards.length != 0)
+		if(size != 0)
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.append("[");
 			//for (int i = 0; i < cards.length; i++)
-			for(Card c : cards)
+			for(int i = 0; i < size; i++)
 			{
 				sb.append("[");
-				sb.append(c);
+				sb.append(cards[i]);
 				sb.append("]");
 				sb.append(", ");
 			}
@@ -128,11 +148,15 @@ public class Rolodex {
 			return "[]";
 	}
 	
+	public int getSize() { return size; }
+	
+	public int getCapacity() { return capacity; }
+	
 	// Sorting methods
 	public void sort()
 	{
 		//Sorts the cards array alphabetically
-		quicksort(cards, 0, cards.length-1);
+		quicksort(cards, 0, size-1);
 	}
 	
 	private void quicksort(Card[] c, int lo, int hi)
