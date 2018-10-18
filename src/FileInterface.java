@@ -3,23 +3,34 @@ import java.io.*;
 
 public class FileInterface
 {
-	private static String fileName = "backup.data";
+	private String fileName;
+	private File f;
+
+	public FileInterface()
+	{
+		fileName = "backup.data";
+		f = new File(fileName);
+	}
+
+	public FileInterface(String file)
+	{
+		fileName = file;
+		f = new File(fileName);
+	}
+
+	public boolean checkFile() { return f.exists(); }
 	
-	public static Rolodex loadContacts()
+	public Rolodex loadContacts()
 	{
 		Rolodex rolo = new Rolodex();
 		try
 		{
-			File f = new File(fileName);
 			Scanner fs = new Scanner(f);
 			String[] temp = new String[6];
+			String[] cur;
 			while(fs.hasNextLine())
 			{
-				for(int i = 0; i < 6; i++)
-				{
-					temp[i] = fs.next();
-					rolo.add(new Card(temp));
-				}
+				rolo.add(new Card(fs.nextLine().split("; ")));
 			}
 		} catch (FileNotFoundException e)
 		{
@@ -29,16 +40,21 @@ public class FileInterface
 		return rolo;
 	}
 	
-	public static void saveContacts(Card[] cards)
+	public void saveContacts(Card[] cards)
 	{
 		try
 		{
-			File f = new File(fileName);
 			PrintWriter pw = new PrintWriter(f);
-			for(Card c : cards)
+			for (Card c : cards)
 			{
-				// TODO
+				if(c != null)
+				{
+					pw.write(c.toString());
+					pw.write("\n");
+				}
 			}
+			pw.flush();
+			pw.close();
 		} catch (FileNotFoundException e)
 		{
 			System.out.println("Error: could not open file " + fileName);

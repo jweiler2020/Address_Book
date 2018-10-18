@@ -6,8 +6,7 @@ public class Rolodex {
 	private Card[] cards; //This will eventually be replaced by Card[] cards
 	private int size;
 	private int capacity;
-	private String fileName = "backup.data";
-	
+
 	public Rolodex()
 	{
 		cards = new Card[1];
@@ -15,13 +14,25 @@ public class Rolodex {
 		capacity = 1;
 	}
 	
-	public static void main (String args[]) {
-		
-		//Create a new Rolodex object
-		Rolodex rolo = new Rolodex();
+	public static void main (String args[])
+	{
+		//Create a FileInterface object
+		FileInterface fi = new FileInterface();
+		Rolodex rolo;
+		if(fi.checkFile())
+		{
+			//Create a new Rolodex object by loading the contacts
+			rolo = fi.loadContacts();
+		}
+		else
+		{
+			//Create default Rolodex object
+			rolo = new Rolodex();
+			System.out.println("Could not find file 'backup.data'. Creating empty address book.");
+		}
 		
 		//Prompt the user to add, delete, print, or quit
-		String input = "";
+		String input;
 		Scanner kb = new Scanner(System.in);
 		boolean done = false;
 		while(!done)
@@ -55,6 +66,7 @@ public class Rolodex {
 				case("q"):
 				case("quit"):
 					done = true;
+					fi.saveContacts(rolo.getCards());
 					break;
 				default:
 					System.out.println("Error: Invalid command. Please enter a valid command");
@@ -78,7 +90,7 @@ public class Rolodex {
 		
 		return new Card(info);
 	}
-	
+
 	public void add(Card card)
 	{
 		//Adds name to the cards array (resizing cards by 1)
@@ -96,7 +108,6 @@ public class Rolodex {
 		}
 		else
 		{
-			System.out.println(size);
 			cards[size-1] = card;
 		}
 	}
@@ -108,7 +119,7 @@ public class Rolodex {
 		if(index < size)
 		{
 			size--;
-			for (int i = index; i < size + 1; i++)
+			for (int i = index; i < size; i++)
 			{
 				cards[i] = cards[i + 1];
 			}
@@ -151,7 +162,9 @@ public class Rolodex {
 	public int getSize() { return size; }
 	
 	public int getCapacity() { return capacity; }
-	
+
+	public Card[] getCards() { return cards; }
+
 	// Sorting methods
 	public void sort()
 	{
